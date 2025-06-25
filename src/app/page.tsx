@@ -256,12 +256,12 @@ export default function PageDucksRivals() {
               {/* Quartas de final */}
               <div id="semi-final" className="space-y-24 relative">
                 <div className="space-y-2">
-                  <Match team="#1 Alfa" score={0} winner={false} />
-                  <Match team="#8 Beta" score={2} winner={true} />
+                  <Match number={0} team="" score={0} winner={false} />
+                  <Match number={0} team="" score={0} winner={true} />
                 </div>
                 <div className="space-y-2">
-                  <Match team="#2 Épsilon" score={1} winner={true} />
-                  <Match team="#7 Zeta" score={0} winner={false} />
+                  <Match number={0} team="" score={0} winner={false} />
+                  <Match number={0} team="" score={0} winner={true} />
                 </div>
               </div>
 
@@ -270,8 +270,8 @@ export default function PageDucksRivals() {
                 id="final"
                 className="flex flex-col justify-between relative py-14"
               >
-                <Match team="#8 Beta" score={0} winner={false} />
-                <Match team="#4 Gama" score={1} winner={true} />
+                <Match number={0} team="" score={0} winner={false} />
+                <Match number={0} team="" score={0} winner={true} />
               </div>
 
               {/* Final */}
@@ -279,7 +279,7 @@ export default function PageDucksRivals() {
                 id="campeao"
                 className="flex flex-col justify-center space-y-2"
               >
-                <Match team="#2 Épsilon" score={1} winner={true} />
+                <Match number={0} team="" score={0} winner={true} />
               </div>
             </div>
           </section>
