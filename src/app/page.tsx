@@ -6,10 +6,8 @@ import Match from '@/components/Match';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Calendar,
-  DollarSign,
   Gamepad2,
   MapPin,
-  Medal,
   Play,
   Star,
   Target,
@@ -114,17 +112,6 @@ export default function PageDucksRivals() {
               <p className="text-gray-600">Partidas Jogadas</p>
             </div>
           </div>
-          <div
-            className={`flex items-center space-x-4 bg-white rounded-xl shadow-md p-4 border-t-4 border-purple-500`}
-          >
-            <div className={`p-3 rounded-full bg-purple-100`}>
-              <DollarSign className={`w-6 h-6 text-purple-600`} />
-            </div>
-            <div>
-              <p className="text-lg font-bold">R$ 1.500</p>
-              <p className="text-gray-600">Premiação Total</p>
-            </div>
-          </div>
         </div>
 
         {/* Upcoming Matches */}
@@ -159,7 +146,7 @@ export default function PageDucksRivals() {
         </div>
 
         {/* Top Teams */}
-        <div className="bg-white rounded-xl shadow-md p-6">
+        {/* <div className="bg-white rounded-xl shadow-md p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center">
             <Medal className="w-6 h-6 mr-2 text-orange-600" />
             Ranking dos Times
@@ -193,7 +180,7 @@ export default function PageDucksRivals() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Tournament Info Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -214,10 +201,6 @@ export default function PageDucksRivals() {
               <div className="flex justify-between">
                 <span className="text-gray-600">Formato:</span>
                 <span className="font-medium">Eliminação Simples</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Premiação:</span>
-                <span className="font-medium text-green-600">R$ 1.500</span>
               </div>
             </div>
           </div>
@@ -246,7 +229,7 @@ export default function PageDucksRivals() {
           {/* Tournament Bracket Table */}
           <section
             id="chaveamento"
-            className="relative overflow-x-auto py-10 px-4"
+            className="bg-white rounded-xl shadow-md relative overflow-x-auto py-10 px-4"
           >
             <h2 className="text-2xl font-bold mb-10 text-orange-600">
               Chaveamento do Torneio
