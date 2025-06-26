@@ -9,7 +9,6 @@ import {
   Gamepad2,
   MapPin,
   Play,
-  Star,
   Target,
   Trophy,
   Users,
@@ -43,11 +42,11 @@ export default function PageDucksRivals() {
     },
   ];
 
-  const topTeams = [
-    { name: 'Ducks Squad', wins: 8, losses: 2, points: 24 },
-    { name: 'Fire Eagles', wins: 7, losses: 3, points: 21 },
-    { name: 'Storm Riders', wins: 6, losses: 4, points: 18 },
-  ];
+  // const topTeams = [
+  //   { name: 'Ducks Squad', wins: 8, losses: 2, points: 24 },
+  //   { name: 'Fire Eagles', wins: 7, losses: 3, points: 21 },
+  //   { name: 'Storm Riders', wins: 6, losses: 4, points: 18 },
+  // ];
 
   return (
     <>
@@ -205,7 +204,7 @@ export default function PageDucksRivals() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md p-6">
+          {/* <div className="bg-white rounded-xl shadow-md p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <Star className="w-5 h-5 mr-2 text-orange-600" />
               Premiação
@@ -224,7 +223,7 @@ export default function PageDucksRivals() {
                 <span className="font-bold text-orange-600">R$ 200</span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Tournament Bracket Table */}
           <section
