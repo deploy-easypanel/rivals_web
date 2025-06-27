@@ -7,7 +7,6 @@ import Header from '@/components/Header';
 import Partidas from '@/components/Partidas';
 import Stats from '@/components/Stats';
 import { MapPin, Medal } from 'lucide-react';
-import { useState } from 'react';
 
 const topTeams = [
   { name: 'Ducks Squad', wins: 8, losses: 2, points: 24 },
@@ -16,24 +15,13 @@ const topTeams = [
 ];
 
 export default function PageDucksRivals() {
-  const [activeTab, setActiveTab] = useState('home');
-
   return (
     <>
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header />
       <main className="space-y-10 px-6 md:px-12 py-10 bg-gray-100">
-        {/* Banner */}
         <Banner dataTorneio={new Date('2025-06-30T14:00:00')} />
-
-        {/* Estatísticas rápidas */}
         <Stats />
-
-        {/* Seção de Tabs */}
-
-        {/* Chaveamento */}
         <Chaveamento />
-
-        {/* Partidas */}
         <Partidas />
 
         {/* Ranking dos times */}
