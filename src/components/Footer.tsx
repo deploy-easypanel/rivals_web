@@ -2,7 +2,7 @@ import { Trophy } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-8 mt-12">
+    <footer className="bg-gray-900 text-white py-8">
       <div className="max-w-7xl mx-auto px-4 text-center">
         <div className="flex items-center justify-center space-x-2 mb-4">
           <Trophy className="w-6 h-6 text-orange-500" />
