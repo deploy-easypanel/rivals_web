@@ -3,24 +3,16 @@
 import ChaveamentoTorneio from '@/components/ChaveamentoTorneio';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import ProximasPartidas from '@/components/ProximasPartidas';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  Calendar,
-  Gamepad2,
-  MapPin,
-  Medal,
-  Play,
-  Target,
-  Trophy,
-  Users,
-} from 'lucide-react';
+import { Gamepad2, MapPin, Medal, Target, Trophy, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function PageDucksRivals() {
   const [activeTab, setActiveTab] = useState('home');
   const [timeLeft, setTimeLeft] = useState('');
 
-  const nextTourneyDate = new Date('2025-06-29T14:00:00'); // Próximo domingo
+  const nextTourneyDate = new Date('2025-06-29T14:00:00');
 
   const updateCountdown = () => {
     const now = new Date();
@@ -43,30 +35,6 @@ export default function PageDucksRivals() {
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  const upcomingMatches = [
-    {
-      id: 1,
-      team1: 'Ducks Squad',
-      team2: 'Rivals Pro',
-      time: '14:00',
-      date: 'Sábado',
-    },
-    {
-      id: 2,
-      team1: 'Fire Eagles',
-      team2: 'Storm Riders',
-      time: '16:00',
-      date: 'Sábado',
-    },
-    {
-      id: 3,
-      team1: 'Night Hawks',
-      team2: 'Cyber Wolves',
-      time: '18:00',
-      date: 'Domingo',
-    },
-  ];
 
   const topTeams = [
     { name: 'Ducks Squad', wins: 8, losses: 2, points: 24 },
@@ -158,36 +126,7 @@ export default function PageDucksRivals() {
 
         {/* Grid principal: partidas e chaveamento */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Próximas partidas */}
-          <section className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-2xl font-bold mb-4 flex items-center">
-              <Calendar className="w-6 h-6 mr-2 text-orange-600" />
-              Próximas Partidas
-            </h2>
-            <div className="space-y-4">
-              {upcomingMatches.map((match) => (
-                <div
-                  key={match.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600">{match.date}</p>
-                      <p className="font-semibold text-orange-600">
-                        {match.time}
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="font-medium">{match.team1}</span>
-                      <span className="text-gray-400">vs</span>
-                      <span className="font-medium">{match.team2}</span>
-                    </div>
-                  </div>
-                  <Play className="w-5 h-5 text-green-600" />
-                </div>
-              ))}
-            </div>
-          </section>
+          <ProximasPartidas />
         </div>
 
         {/* Ranking dos times */}

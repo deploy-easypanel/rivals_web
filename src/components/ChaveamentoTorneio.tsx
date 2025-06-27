@@ -1,5 +1,5 @@
-import { Crown, ShieldCheck, Swords, Trophy } from 'lucide-react';
-import { useState } from 'react';
+import { Crown, RotateCcw, ShieldCheck, Swords, Trophy } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 type CorType = 'green' | 'yellow' | 'gray';
 
@@ -26,6 +26,24 @@ interface TorneioState {
   final: TimeSimples;
 }
 
+const defaultState: TorneioState = {
+  quartas: [
+    {
+      timeA: { nome: 'Time A', placar: 0, cor: 'gray' },
+      timeB: { nome: 'Time B', placar: 0, cor: 'gray' },
+    },
+    {
+      timeA: { nome: 'Time C', placar: 0, cor: 'gray' },
+      timeB: { nome: 'Time D', placar: 0, cor: 'gray' },
+    },
+  ],
+  semifinais: [
+    { time: '', placar: 0, cor: 'gray' },
+    { time: '', placar: 0, cor: 'gray' },
+  ],
+  final: { time: '', placar: 0, cor: 'gray' },
+};
+
 const bgTextColors: Record<CorType, string> = {
   green: 'bg-green-100 text-green-700',
   yellow: 'bg-yellow-50 text-yellow-600',
@@ -39,92 +57,109 @@ const iconColors: Record<CorType, string> = {
 };
 
 export default function ChaveamentoTorneio() {
-  const [torneio, setTorneio] = useState<TorneioState>({
-    quartas: [
-      {
-        timeA: { nome: 'Time A', placar: 0, cor: 'gray' },
-        timeB: { nome: 'Time B', placar: 0, cor: 'gray' },
-      },
-      {
-        timeA: { nome: 'Time C', placar: 0, cor: 'gray' },
-        timeB: { nome: 'Time D', placar: 0, cor: 'gray' },
-      },
-    ],
-    semifinais: [
-      { time: '', placar: 0, cor: 'gray' },
-      { time: '', placar: 0, cor: 'gray' },
-    ],
-    final: { time: '', placar: 0, cor: 'gray' },
-  });
+  const [torneio, setTorneio] = useState<TorneioState>(defaultState);
+
+  useEffect(() => {
+    const salvo = localStorage.getItem('torneio');
+    if (salvo) {
+      try {
+        const parsed = JSON.parse(salvo);
+        setTorneio(parsed);
+      } catch {
+        setTorneio(defaultState);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('torneio', JSON.stringify(torneio));
+  }, [torneio]);
+
+  const resetarTorneio = () => {
+    localStorage.removeItem('torneio');
+    setTorneio(defaultState);
+  };
 
   const handleInput = (
-    fase: string,
+    fase: 'quartas' | 'semifinais' | 'final',
     idx: number,
     key: string,
     campo: string,
     valor: string | number
   ) => {
     setTorneio((prev) => {
-      const copia = JSON.parse(JSON.stringify(prev));
-      const val = campo === 'placar' ? parseInt(String(valor)) : valor;
+      const copia: TorneioState = JSON.parse(JSON.stringify(prev));
+      const val = campo === 'placar' ? Number(valor) : valor;
+
+      const setCor = (scoreA: number, scoreB: number) => {
+        if (scoreA > scoreB) return ['green', 'yellow'];
+        if (scoreB > scoreA) return ['yellow', 'green'];
+        return ['gray', 'gray'];
+      };
 
       if (fase === 'quartas') {
-        copia.quartas[idx][key][campo] = val;
-
         const jogo = copia.quartas[idx];
-        const scoreA = jogo.timeA.placar;
-        const scoreB = jogo.timeB.placar;
-
-        if (
-          typeof scoreA === 'number' &&
-          typeof scoreB === 'number' &&
-          scoreA !== scoreB
-        ) {
-          const vencedor = scoreA > scoreB ? jogo.timeA : jogo.timeB;
-
-          jogo.timeA.cor = scoreA > scoreB ? 'green' : 'yellow';
-          jogo.timeB.cor = scoreB > scoreA ? 'green' : 'yellow';
-
-          copia.semifinais[idx] = {
-            time: vencedor.nome,
-            placar: copia.semifinais[idx].placar ?? 0,
-            cor: 'green',
-          };
-        } else {
-          jogo.timeA.cor = 'gray';
-          jogo.timeB.cor = 'gray';
-          copia.semifinais[idx] = {
-            time: '',
-            placar: 0,
-            cor: 'gray',
-          };
+        if (campo === 'placar' && typeof val === 'number') {
+          (jogo[key as keyof Jogo] as Time).placar = val;
+        } else if (campo === 'nome' && typeof val === 'string') {
+          (jogo[key as keyof Jogo] as Time).nome = val;
         }
-      } else if (fase === 'semifinais') {
-        copia.semifinais[idx][campo] = val;
 
-        const sf1 = copia.semifinais[0];
-        const sf2 = copia.semifinais[1];
-        const p1 = sf1.placar;
-        const p2 = sf2.placar;
+        const { timeA, timeB } = jogo;
+        const [corA, corB] = setCor(timeA.placar, timeB.placar);
+        timeA.cor = corA as CorType;
+        timeB.cor = corB as CorType;
 
-        if (typeof p1 === 'number' && typeof p2 === 'number' && p1 !== p2) {
-          const vencedor = p1 > p2 ? sf1 : sf2;
+        const vencedor =
+          timeA.placar > timeB.placar
+            ? timeA
+            : timeB.placar > timeA.placar
+            ? timeB
+            : null;
 
-          copia.semifinais[0].cor = sf1 === vencedor ? 'green' : 'yellow';
-          copia.semifinais[1].cor = sf2 === vencedor ? 'green' : 'yellow';
+        copia.semifinais[idx] = vencedor
+          ? {
+              time: vencedor.nome,
+              placar: copia.semifinais[idx].placar || 0,
+              cor: 'green',
+            }
+          : { time: '', placar: 0, cor: 'gray' };
+      }
 
-          copia.final = {
-            time: vencedor.time,
-            placar: copia.final.placar ?? 0,
-            cor: 'green',
-          };
-        } else {
-          copia.semifinais[0].cor = 'gray';
-          copia.semifinais[1].cor = 'gray';
-          copia.final = { time: '', placar: 0, cor: 'gray' };
+      if (fase === 'semifinais') {
+        const semi = copia.semifinais[idx];
+        if (campo === 'placar' && typeof val === 'number') {
+          semi.placar = val;
+        } else if (campo === 'time' && typeof val === 'string') {
+          semi.time = val;
         }
-      } else if (fase === 'final') {
-        copia.final[campo] = val;
+
+        const [sf1, sf2] = copia.semifinais;
+        const [cor1, cor2] = setCor(sf1.placar, sf2.placar);
+        sf1.cor = cor1 as CorType;
+        sf2.cor = cor2 as CorType;
+
+        const vencedor =
+          sf1.placar > sf2.placar ? sf1 : sf2.placar > sf1.placar ? sf2 : null;
+
+        copia.final = vencedor
+          ? {
+              time: vencedor.time,
+              placar: copia.final.placar || 0,
+              cor: 'green',
+            }
+          : { time: '', placar: 0, cor: 'gray' };
+      }
+
+      if (fase === 'final') {
+        const final = copia.final;
+        if (campo === 'placar' && typeof val === 'number') {
+          final.placar = val;
+        } else if (campo === 'time' && typeof val === 'string') {
+          final.time = val;
+        }
+
+        final.cor = final.time && final.placar > 0 ? 'green' : 'gray';
       }
 
       return copia;
@@ -134,14 +169,25 @@ export default function ChaveamentoTorneio() {
   return (
     <div className="flex flex-col md:flex-row gap-8">
       {/* FORMULÁRIO */}
-      <div className="w-full md:w-1/3 bg-white rounded-xl shadow-md p-6 space-y-6">
-        <h2 className="text-lg font-semibold text-orange-600">Editar Jogos</h2>
+      <div className="w-full md:w-1/5 bg-white rounded-xl shadow-md p-6 space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-orange-600">
+            Editar Jogos
+          </h2>
+          <button
+            onClick={resetarTorneio}
+            className="flex items-center gap-1 text-sm text-red-500 hover:underline cursor-pointer"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Resetar
+          </button>
+        </div>
 
         {/* Quartas */}
         {torneio.quartas.map((jogo, idx) => (
           <div key={idx} className="space-y-2">
             {(['timeA', 'timeB'] as const).map((key) => (
-              <div key={key} className="flex items-center gap-2">
+              <div key={key} className="flex items-center gap-6">
                 <input
                   type="text"
                   className="border rounded p-1 w-1/2"
@@ -166,7 +212,7 @@ export default function ChaveamentoTorneio() {
 
         {/* Semifinais */}
         {torneio.semifinais.map((sf, idx) => (
-          <div key={idx} className="flex items-center gap-2">
+          <div key={idx} className="flex items-center gap-6">
             <input
               className="border rounded p-1 w-1/2"
               value={sf.time}
@@ -185,62 +231,36 @@ export default function ChaveamentoTorneio() {
             />
           </div>
         ))}
-
-        {/* Final */}
-        <div className="flex items-center gap-2">
-          <input
-            className="border rounded p-1 w-1/2"
-            value={torneio.final.time}
-            onChange={(e) =>
-              handleInput('final', 0, '', 'time', e.target.value)
-            }
-          />
-          <input
-            type="number"
-            className="border rounded p-1 w-20"
-            min={0}
-            value={torneio.final.placar}
-            onChange={(e) =>
-              handleInput('final', 0, '', 'placar', e.target.value)
-            }
-          />
-        </div>
       </div>
 
-      {/* CHAVEAMENTO VISUAL */}
+      {/* VISUAL */}
       <section className="w-full bg-white rounded-xl shadow-md p-6 overflow-x-auto">
         <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-orange-600">
           <Trophy className="w-5 h-5" /> Chaveamento do Torneio
         </h3>
-
         <div className="grid grid-cols-3 gap-x-16 min-w-[700px]">
           {/* Quartas */}
           <div className="space-y-16">
-            {torneio.quartas.map((jogo, idx) => {
-              const a = jogo.timeA;
-              const b = jogo.timeB;
-
-              return (
-                <div key={idx} className="space-y-2">
-                  {[a, b].map((time, i) => (
-                    <div
-                      key={i}
-                      className={`flex items-center justify-between ${
-                        bgTextColors[time.cor]
-                      } p-3 rounded-lg shadow`}
-                    >
-                      <span className="flex items-center gap-2">
-                        <ShieldCheck
-                          className={`w-4 h-4 ${iconColors[time.cor]}`}
-                        />
-                        {time.nome}
-                      </span>
-                      <span className="font-bold">{time.placar}</span>
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
+            {torneio.quartas.map((jogo, idx) => (
+              <div key={idx} className="space-y-2">
+                {[jogo.timeA, jogo.timeB].map((time, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center justify-between ${
+                      bgTextColors[time.cor]
+                    } p-3 rounded-lg shadow`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck
+                        className={`w-4 h-4 ${iconColors[time.cor]}`}
+                      />
+                      {time.nome}
+                    </span>
+                    <span className="font-bold">{time.placar}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
 
           {/* Semifinais */}
@@ -253,7 +273,7 @@ export default function ChaveamentoTorneio() {
                 } p-3 rounded-lg shadow`}
               >
                 <span className="flex items-center gap-2">
-                  <Swords className={`w-4 h-4 ${iconColors[sf.cor]}`} />{' '}
+                  <Swords className={`w-4 h-4 ${iconColors[sf.cor]}`} />
                   {sf.time}
                 </span>
                 <span className="font-bold">{sf.placar}</span>
@@ -271,15 +291,8 @@ export default function ChaveamentoTorneio() {
               }`}
             >
               <span className="flex items-center gap-2 font-bold">
-                <Crown
-                  className={`w-5 h-5 ${
-                    iconColors[torneio.final.cor] || 'text-gray-500'
-                  }`}
-                />
+                <Crown className={`w-5 h-5 ${iconColors[torneio.final.cor]}`} />
                 {torneio.final.time}
-              </span>
-              <span className="text-xl font-extrabold">
-                {torneio.final.placar}
               </span>
             </div>
           </div>
