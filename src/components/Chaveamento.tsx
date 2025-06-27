@@ -1,4 +1,14 @@
-import { Crown, RotateCcw, ShieldCheck, Swords, Trophy } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import {
+  Crown,
+  Hash,
+  Pen,
+  RotateCcw,
+  ShieldCheck,
+  Swords,
+  Trophy,
+  User,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type CorType = 'green' | 'yellow' | 'gray';
@@ -169,69 +179,96 @@ export default function ChaveamentoTorneio() {
   return (
     <div className="flex flex-col md:flex-row gap-8">
       {/* FORMULÁRIO */}
-      <div className="w-full md:w-1/5 bg-white rounded-xl shadow-md p-6 space-y-6">
+      <section className="w-full md:w-[30%] bg-white rounded-xl shadow-md p-6 space-y-8">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-orange-600">
-            Editar Jogos
-          </h2>
+          <h3 className="text-lg font-semibold text-orange-600 flex items-center">
+            <Pen className="w-4 h-4 mr-2" />
+            Gerenciar Chaveamento
+          </h3>
           <button
             onClick={resetarTorneio}
-            className="flex items-center gap-1 text-sm text-red-500 hover:underline cursor-pointer"
+            className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-800 transition-colors"
+            title="Resetar Torneio"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-5 h-5" />
             Resetar
           </button>
         </div>
 
         {/* Quartas */}
-        {torneio.quartas.map((jogo, idx) => (
-          <div key={idx} className="space-y-2">
-            {(['timeA', 'timeB'] as const).map((key) => (
-              <div key={key} className="flex items-center gap-6">
-                <input
-                  type="text"
-                  className="border rounded p-1 w-1/2"
-                  value={jogo[key].nome}
-                  onChange={(e) =>
-                    handleInput('quartas', idx, key, 'nome', e.target.value)
-                  }
-                />
-                <input
-                  type="number"
-                  className="border rounded p-1 w-20"
-                  min={0}
-                  value={jogo[key].placar}
-                  onChange={(e) =>
-                    handleInput('quartas', idx, key, 'placar', e.target.value)
-                  }
-                />
-              </div>
-            ))}
-          </div>
-        ))}
+        <div className="space-y-6">
+          {torneio.quartas.map((jogo, idx) => (
+            <div key={idx} className="space-y-3">
+              {(['timeA', 'timeB'] as const).map((key) => (
+                <div key={key} className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 w-1/2">
+                    <User className="w-5 h-5 text-gray-400" />
+                    <Input
+                      value={jogo[key].nome}
+                      onChange={(e) =>
+                        handleInput('quartas', idx, key, 'nome', e.target.value)
+                      }
+                      placeholder="Nome do time"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 w-20">
+                    <Hash className="w-5 h-5 text-gray-400" />
+                    <Input
+                      type="text"
+                      min={0}
+                      value={jogo[key].placar}
+                      onChange={(e) =>
+                        handleInput(
+                          'quartas',
+                          idx,
+                          key,
+                          'placar',
+                          e.target.value
+                        )
+                      }
+                      placeholder="0"
+                      className="w-full text-center"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
 
         {/* Semifinais */}
-        {torneio.semifinais.map((sf, idx) => (
-          <div key={idx} className="flex items-center gap-6">
-            <input
-              className="border rounded p-1 w-1/2"
-              value={sf.time}
-              onChange={(e) =>
-                handleInput('semifinais', idx, '', 'time', e.target.value)
-              }
-            />
-            <input
-              type="number"
-              className="border rounded p-1 w-20"
-              min={0}
-              value={sf.placar}
-              onChange={(e) =>
-                handleInput('semifinais', idx, '', 'placar', e.target.value)
-              }
-            />
-          </div>
-        ))}
-      </div>
+        <div className="space-y-4">
+          {torneio.semifinais.map((sf, idx) => (
+            <div key={idx} className="flex items-center gap-4">
+              <div className="flex items-center gap-2 w-1/2">
+                <User className="w-5 h-5 text-gray-400" />
+                <Input
+                  value={sf.time}
+                  onChange={(e) =>
+                    handleInput('semifinais', idx, '', 'time', e.target.value)
+                  }
+                  placeholder="Semi-finalista"
+                  className="w-full"
+                />
+              </div>
+              <div className="flex items-center gap-2 w-20">
+                <Hash className="w-5 h-5 text-gray-400" />
+                <Input
+                  type="text"
+                  min={0}
+                  value={sf.placar}
+                  onChange={(e) =>
+                    handleInput('semifinais', idx, '', 'placar', e.target.value)
+                  }
+                  placeholder="0"
+                  className="w-full text-center"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* VISUAL */}
       <section className="w-full bg-white rounded-xl shadow-md p-6 overflow-x-auto">

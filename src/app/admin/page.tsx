@@ -1,9 +1,9 @@
 'use client';
 
-import Chaveamento from '@/components/Chaveamento';
+import ChaveamentoTorneio from '@/components/ChaveamentoTorneio';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import Partidas from '@/components/Partidas';
+import ProximasPartidas from '@/components/ProximasPartidas';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Gamepad2, MapPin, Medal, Target, Trophy, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -122,10 +122,12 @@ export default function PageDucksRivals() {
         </section>
 
         {/* Chaveamento */}
-        <Chaveamento />
+        <ChaveamentoTorneio />
 
-        {/* Partidas */}
-        <Partidas />
+        {/* Grid principal: partidas e chaveamento */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <ProximasPartidas />
+        </div>
 
         {/* Ranking dos times */}
         <section className="bg-white rounded-xl shadow-md p-6">
