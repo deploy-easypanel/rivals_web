@@ -35,7 +35,7 @@ type Match = {
 
 const LOCAL_STORAGE_KEY = 'ducksgaming_matches';
 
-export default function ProximasPartidas() {
+export default function AdminPartidas() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
 

@@ -7,7 +7,12 @@ interface MatchProps {
   winner: boolean;
 }
 
-const Match: React.FC<MatchProps> = ({ number, team, score, winner }) => {
+export const AdminMatch: React.FC<MatchProps> = ({
+  number,
+  team,
+  score,
+  winner,
+}) => {
   return (
     <div
       className={`grid grid-cols-3 items-center justify-between w-44 p-2 shadow rounded ${
@@ -20,5 +25,3 @@ const Match: React.FC<MatchProps> = ({ number, team, score, winner }) => {
     </div>
   );
 };
-
-export default Match;

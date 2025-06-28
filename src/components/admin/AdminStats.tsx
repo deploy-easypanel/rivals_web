@@ -47,7 +47,7 @@ function StatCard({ icon, label, value, color }: StatCardProps) {
   );
 }
 
-export default function Stats() {
+export default function AdminStats() {
   const stats = [
     {
       icon: <Users className="w-6 h-6 text-blue-600" aria-label="Times" />,

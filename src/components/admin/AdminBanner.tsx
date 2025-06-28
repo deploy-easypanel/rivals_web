@@ -10,7 +10,7 @@ interface BannerProps {
   dataTorneio: Date;
 }
 
-export default function Banner({ dataTorneio }: BannerProps) {
+export default function AdminBanner({ dataTorneio }: BannerProps) {
   const [timeLeft, setTimeLeft] = useState('');
 
   useEffect(() => {

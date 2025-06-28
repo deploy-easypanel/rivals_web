@@ -66,7 +66,7 @@ const iconColors: Record<CorType, string> = {
   gray: 'text-gray-500',
 };
 
-export default function ChaveamentoTorneio() {
+export default function AdminChaveamento() {
   const [torneio, setTorneio] = useState<TorneioState>(defaultState);
 
   useEffect(() => {
