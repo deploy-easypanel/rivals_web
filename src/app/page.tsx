@@ -1,10 +1,10 @@
 'use client';
 
-import Banner from '@/components/Banner';
+// import Banner from '@/components/Banner';
 import Chaveamento from '@/components/Chaveamento';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import Partidas from '@/components/Partidas';
+// import Partidas from '@/components/Partidas';
 import Stats from '@/components/Stats';
 import { MapPin, Medal } from 'lucide-react';
 
@@ -19,10 +19,10 @@ export default function PageDucksRivals() {
     <>
       <Header />
       <main className="space-y-10 px-6 md:px-12 py-10 bg-gray-100">
-        <Banner dataTorneio={new Date('2025-06-30T14:00:00')} />
+        {/* <Banner dataTorneio={new Date('2025-06-30T14:00:00')} /> */}
         <Stats />
         <Chaveamento />
-        <Partidas />
+        {/* <Partidas /> */}
 
         {/* Ranking dos times */}
         <section className="bg-white rounded-xl shadow-md p-6">
