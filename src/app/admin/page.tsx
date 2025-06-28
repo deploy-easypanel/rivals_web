@@ -2,10 +2,10 @@
 
 import AdminBanner from '@/components/admin/AdminBanner';
 import AdminChaveamento from '@/components/admin/AdminChaveamento';
+import AdminHeader from '@/components/admin/AdminHeader';
 import AdminPartidas from '@/components/admin/AdminPartidas';
 import AdminTorneioInfo from '@/components/admin/AdminTorneioInfo';
 import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import Stats from '@/components/Stats';
 import { Medal } from 'lucide-react';
 
@@ -18,13 +18,13 @@ const topTeams = [
 export default function PageDucksRivals() {
   return (
     <>
-      <Header />
+      <AdminHeader />
       <main className="space-y-10 px-6 md:px-12 py-10 bg-gray-100">
-        <AdminBanner dataTorneio={new Date('2025-06-30T14:00:00')} />
+        <AdminBanner />
         <Stats />
-        <AdminTorneioInfo />
         <AdminChaveamento />
         <AdminPartidas />
+        <AdminTorneioInfo />
 
         {/* Ranking dos times */}
         <section className="bg-white rounded-xl shadow-md p-6">

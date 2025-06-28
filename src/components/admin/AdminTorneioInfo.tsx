@@ -45,7 +45,7 @@ export default function AdminTorneioInfo() {
   return (
     <div className="flex flex-col md:flex-row gap-6">
       {/* Bloco de Edição */}
-      <div className="w-full md:w-[40%] bg-white rounded-xl shadow-md p-6 space-y-6">
+      <section className="w-full md:w-[30%] bg-white rounded-xl shadow-md p-6 space-y-8">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-orange-600 flex items-center gap-2">
             <Pencil className="w-5 h-5" />
@@ -99,10 +99,10 @@ export default function AdminTorneioInfo() {
             />
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Bloco de Visualização */}
-      <div className="w-full md:w-[60%] bg-white rounded-xl shadow-md p-6">
+      <section className="w-full bg-white rounded-xl shadow-md p-6 overflow-x-auto">
         <h3 className="text-xl font-bold mb-4 flex items-center text-orange-600">
           <MapPin className="w-5 h-5 mr-2" />
           Informações do Torneio
@@ -130,7 +130,7 @@ export default function AdminTorneioInfo() {
             <span className="font-medium">{data.formato}</span>
           </li>
         </ul>
-      </div>
+      </section>
     </div>
   );
 }
