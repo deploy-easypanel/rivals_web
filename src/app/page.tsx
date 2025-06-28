@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Partidas from '@/components/Partidas';
 import Stats from '@/components/Stats';
+import TorneioInfo from '@/components/TorneioInfo';
 import { MapPin, Medal } from 'lucide-react';
 
 const topTeams = [
@@ -21,6 +22,7 @@ export default function PageDucksRivals() {
       <main className="space-y-10 px-6 md:px-12 py-10 bg-gray-100">
         {/* <Banner dataTorneio={new Date('2025-06-30T14:00:00')} /> */}
         <Stats />
+        <TorneioInfo />
         <Chaveamento />
         <Partidas />
 

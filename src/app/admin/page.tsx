@@ -3,10 +3,11 @@
 import AdminBanner from '@/components/admin/AdminBanner';
 import AdminChaveamento from '@/components/admin/AdminChaveamento';
 import AdminPartidas from '@/components/admin/AdminPartidas';
+import AdminTorneioInfo from '@/components/admin/AdminTorneioInfo';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Stats from '@/components/Stats';
-import { MapPin, Medal } from 'lucide-react';
+import { Medal } from 'lucide-react';
 
 const topTeams = [
   { name: 'Ducks Squad', wins: 8, losses: 2, points: 24 },
@@ -21,6 +22,7 @@ export default function PageDucksRivals() {
       <main className="space-y-10 px-6 md:px-12 py-10 bg-gray-100">
         <AdminBanner dataTorneio={new Date('2025-06-30T14:00:00')} />
         <Stats />
+        <AdminTorneioInfo />
         <AdminChaveamento />
         <AdminPartidas />
 
@@ -59,28 +61,6 @@ export default function PageDucksRivals() {
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Informações do Torneio */}
-        <section className="bg-white rounded-xl shadow-md p-6">
-          <h3 className="text-xl font-bold mb-4 flex items-center">
-            <MapPin className="w-5 h-5 mr-2 text-orange-600" />
-            Informações do Torneio
-          </h3>
-          <ul className="space-y-3">
-            <li className="flex justify-between">
-              <span className="text-gray-600">Local:</span>
-              <span className="font-medium">Stream Twitch</span>
-            </li>
-            <li className="flex justify-between">
-              <span className="text-gray-600">Horário:</span>
-              <span className="font-medium">14:00 - 20:00</span>
-            </li>
-            <li className="flex justify-between">
-              <span className="text-gray-600">Formato:</span>
-              <span className="font-medium">Eliminação Simples</span>
-            </li>
-          </ul>
         </section>
       </main>
       <Footer />
