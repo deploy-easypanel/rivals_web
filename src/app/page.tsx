@@ -4,7 +4,7 @@
 import Chaveamento from '@/components/Chaveamento';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-// import Partidas from '@/components/Partidas';
+import Partidas from '@/components/Partidas';
 import Stats from '@/components/Stats';
 import { MapPin, Medal } from 'lucide-react';
 
@@ -22,7 +22,7 @@ export default function PageDucksRivals() {
         {/* <Banner dataTorneio={new Date('2025-06-30T14:00:00')} /> */}
         <Stats />
         <Chaveamento />
-        {/* <Partidas /> */}
+        <Partidas />
 
         {/* Ranking dos times */}
         <section className="bg-white rounded-xl shadow-md p-6">
