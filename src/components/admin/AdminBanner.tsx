@@ -9,6 +9,8 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 
+const LOCAL_STORAGE_KEY = 'ducksgaming_banner_config';
+
 export default function AdminBanner() {
   const [timeLeft, setTimeLeft] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -26,7 +28,7 @@ export default function AdminBanner() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('bannerConfig');
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved) {
         const config = JSON.parse(saved);
         if (config.dataTorneio) setDataTorneio(new Date(config.dataTorneio));
@@ -78,7 +80,7 @@ export default function AdminBanner() {
       return;
     }
     localStorage.setItem(
-      'bannerConfig',
+      LOCAL_STORAGE_KEY,
       JSON.stringify({
         dataTorneio: dataTorneio.toISOString(),
         title,
