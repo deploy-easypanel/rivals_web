@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+const LOCAL_STORAGE_KEY = 'ducksgaming_ranking';
 interface Team {
   name: string;
   points: number;
@@ -27,7 +28,7 @@ export default function AdminRanking() {
   const [teams, setTeams] = useState<Team[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('ranking');
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved) {
       try {
         setTeams(JSON.parse(saved));
