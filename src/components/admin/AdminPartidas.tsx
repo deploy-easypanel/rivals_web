@@ -83,7 +83,7 @@ export default function AdminPartidas() {
     <div className="flex flex-col md:flex-row gap-8">
       {/* GERENCIAR PARTIDAS */}
       <section className="w-full md:w-[30%] bg-white rounded-xl shadow-md p-6 space-y-8">
-        <h2 className="text-2xl font-bold text-orange-600 flex items-center">
+        <h2 className="text-xl font-bold text-orange-600 flex items-center">
           <Pen className="w-5 h-5 mr-2" />
           Gerenciar Partidas
         </h2>
