@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+const LOCAL_STORAGE_KEY = 'ducksgaming_chaveamento';
+
 type CorType = 'green' | 'yellow' | 'gray';
 
 interface Time {
@@ -70,7 +72,7 @@ export default function AdminChaveamento() {
   const [torneio, setTorneio] = useState<TorneioState>(defaultState);
 
   useEffect(() => {
-    const salvo = localStorage.getItem('torneio');
+    const salvo = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (salvo) {
       try {
         const parsed = JSON.parse(salvo);
@@ -82,11 +84,11 @@ export default function AdminChaveamento() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('torneio', JSON.stringify(torneio));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(torneio));
   }, [torneio]);
 
   const resetarTorneio = () => {
-    localStorage.removeItem('torneio');
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
     setTorneio(defaultState);
   };
 
