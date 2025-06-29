@@ -119,7 +119,7 @@ export default function AdminBanner() {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-orange-600 flex items-center gap-2">
             <Pencil className="w-5 h-5" />
-            Editor de Banner
+            Editar Banner
           </h2>
 
           {isEditing ? (
