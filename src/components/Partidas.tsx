@@ -34,7 +34,7 @@ export default function Partidas() {
     <section className="w-full bg-white rounded-xl shadow-md p-6 overflow-x-auto">
       <h2 className="text-2xl font-bold flex items-center text-orange-600 mb-4">
         <Calendar className="w-6 h-6 mr-2" />
-        Partidas
+        Partidas do Torneio
       </h2>
 
       {matches.length === 0 ? (
