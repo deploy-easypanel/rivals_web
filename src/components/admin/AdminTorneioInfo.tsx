@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const STORAGE_KEY = 'torneio_info';
+const LOCAL_STORAGE_KEY = 'ducksgaming_torneio_info';
 
 interface TorneioData {
   local: string;
@@ -37,7 +37,7 @@ export default function AdminTorneioInfo() {
 
   // Carregar do localStorage
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -49,7 +49,7 @@ export default function AdminTorneioInfo() {
   }, []);
 
   const handleSave = () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
     setEditMode(false);
   };
 
