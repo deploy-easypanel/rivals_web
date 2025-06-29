@@ -33,7 +33,7 @@ type Match = {
   status: 'ao vivo' | 'encerrada';
 };
 
-const LOCAL_STORAGE_KEY = 'ducksgaming_matches';
+const LOCAL_STORAGE_KEY = 'ducksgaming_partidas';
 
 export default function AdminPartidas() {
   const [matches, setMatches] = useState<Match[]>([]);
