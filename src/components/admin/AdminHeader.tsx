@@ -1,25 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
-  Calendar,
   LogOut,
-  Pencil,
   PlusCircle,
   Settings,
   ShieldCheck,
   Trophy,
 } from 'lucide-react';
-import { useState } from 'react';
 
 export default function AdminHeader() {
-  const [isEditing, setIsEditing] = useState(false);
-  const [title, setTitle] = useState('Ducks Rivals');
-  const [subtitle, setSubtitle] = useState('Campeonato CS2');
-  const [date, setDate] = useState('28/07/2025');
-  const [time, setTime] = useState('18:00');
-
   return (
     <header>
       {/* HEADER */}
@@ -31,25 +21,8 @@ export default function AdminHeader() {
               <ShieldCheck className="w-7 h-7 text-white" />
             </div>
             <div>
-              {isEditing ? (
-                <>
-                  <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="text-xl font-bold text-gray-900"
-                  />
-                  <Input
-                    value={subtitle}
-                    onChange={(e) => setSubtitle(e.target.value)}
-                    className="text-sm text-gray-500 mt-1"
-                  />
-                </>
-              ) : (
-                <>
-                  <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-                  <p className="text-sm text-gray-500">{subtitle}</p>
-                </>
-              )}
+              <h1 className="text-2xl font-bold text-gray-900">Ducks Rivals</h1>
+              <p className="text-sm text-gray-500">Painel de Administrador</p>
             </div>
           </div>
 
@@ -77,40 +50,6 @@ export default function AdminHeader() {
       {/* SUBHEADER */}
       <section className="bg-gray-50 border-b shadow-sm top-20 z-40">
         <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap gap-3 items-center">
-          {/* Data e hora */}
-          <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-md shadow-sm">
-            <Calendar className="w-4 h-4 text-orange-600" />
-            {isEditing ? (
-              <>
-                <Input
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-24 h-8 text-sm"
-                />
-                <Input
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className="w-20 h-8 text-sm"
-                />
-              </>
-            ) : (
-              <span className="text-sm font-medium text-gray-700">
-                {date} • {time}
-              </span>
-            )}
-          </div>
-
-          {/* Botões de ação */}
-          <Button
-            variant="ghost"
-            onClick={() => setIsEditing(!isEditing)}
-            title="Editar informações"
-            className="flex items-center gap-1 text-sm"
-          >
-            <Pencil className="w-4 h-4" />
-            <span className="hidden sm:inline">Editar Info</span>
-          </Button>
-
           <Button
             variant="ghost"
             title="Cadastrar Time (em breve)"
