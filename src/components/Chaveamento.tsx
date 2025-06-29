@@ -47,9 +47,9 @@ const defaultState: TorneioState = {
 };
 
 const bgTextColors: Record<CorType, string> = {
-  green: 'bg-green-100 text-green-700',
-  yellow: 'bg-yellow-50 text-yellow-600',
-  gray: 'bg-gray-50 text-gray-600',
+  green: 'bg-green-100 text-green-800',
+  yellow: 'bg-yellow-100 text-yellow-700',
+  gray: 'bg-gray-100 text-gray-600',
 };
 
 const iconColors: Record<CorType, string> = {
@@ -74,14 +74,15 @@ export default function Chaveamento() {
   }, []);
 
   return (
-    <section className="bg-white rounded-xl shadow-md p-6 overflow-x-auto">
-      <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-orange-600">
-        <Trophy className="w-5 h-5" /> Chaveamento do Torneio
-      </h3>
+    <section className="bg-white rounded-xl shadow-xl p-6 overflow-x-auto border border-zinc-200">
+      <div className="text-2xl font-extrabold mb-8 text-orange-600 flex items-center gap-3">
+        <Trophy className="w-7 h-7 text-orange-600" />
+        Chaveamento do Torneio
+      </div>
 
-      <div className="grid grid-cols-3 gap-x-16 min-w-[700px]">
+      <div className="grid grid-cols-3 gap-x-16 min-w-[800px]">
         {/* Quartas */}
-        <div className="space-y-16">
+        <div className="space-y-10">
           {torneio.quartas.map((jogo, idx) => (
             <div key={idx} className="space-y-2">
               {[jogo.timeA, jogo.timeB].map((time, i) => (
@@ -89,15 +90,15 @@ export default function Chaveamento() {
                   key={i}
                   className={`flex items-center justify-between ${
                     bgTextColors[time.cor]
-                  } p-3 rounded-lg shadow`}
+                  } p-3 rounded-xl shadow-md transition duration-300`}
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2 font-medium">
                     <ShieldCheck
-                      className={`w-4 h-4 ${iconColors[time.cor]}`}
+                      className={`w-5 h-5 ${iconColors[time.cor]}`}
                     />
                     {time.nome}
                   </span>
-                  <span className="font-bold">{time.placar}</span>
+                  <span className="text-lg font-bold">{time.placar}</span>
                 </div>
               ))}
             </div>
@@ -105,35 +106,41 @@ export default function Chaveamento() {
         </div>
 
         {/* Semifinais */}
-        <div className="flex flex-col justify-around py-8 space-y-2">
+        <div className="flex flex-col justify-around space-y-10">
           {torneio.semifinais.map((sf, idx) => (
             <div
               key={idx}
               className={`flex items-center justify-between ${
                 bgTextColors[sf.cor]
-              } p-3 rounded-lg shadow`}
+              } p-4 rounded-xl shadow-md`}
             >
-              <span className="flex items-center gap-2">
-                <Swords className={`w-4 h-4 ${iconColors[sf.cor]}`} />
+              <span className="flex items-center gap-2 font-medium">
+                <Swords className={`w-5 h-5 ${iconColors[sf.cor]}`} />
                 {sf.time}
               </span>
-              <span className="font-bold">{sf.placar}</span>
+              <span className="text-lg font-bold">{sf.placar}</span>
             </div>
           ))}
         </div>
 
         {/* Final */}
-        <div className="flex flex-col justify-center space-y-2">
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-center text-sm text-orange-700 font-semibold mb-2">
+            CAMPEÃO
+          </p>
           <div
-            className={`flex items-center justify-between border p-4 rounded-lg shadow ${
+            className={`flex items-center justify-between w-full max-w-sm p-5 rounded-xl shadow-lg border-2 ${
               torneio.final.cor === 'green'
-                ? 'bg-green-100 border-green-300 text-green-800'
+                ? 'bg-green-50 border-green-400 text-green-800'
                 : 'bg-gray-100 border-gray-300 text-gray-600'
             }`}
           >
-            <span className="flex items-center gap-2 font-bold">
-              <Crown className={`w-5 h-5 ${iconColors[torneio.final.cor]}`} />
+            <span className="flex items-center gap-2 font-bold text-xl">
+              <Crown className={`w-6 h-6 ${iconColors[torneio.final.cor]}`} />
               {torneio.final.time}
+            </span>
+            <span className="text-2xl font-extrabold">
+              {torneio.final.placar}
             </span>
           </div>
         </div>
