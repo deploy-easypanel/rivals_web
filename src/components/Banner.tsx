@@ -69,7 +69,7 @@ export default function UserBanner() {
   }, [dataTorneio]);
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       {/* Banner principal */}
       <section
         className="rounded-2xl p-8 text-white shadow-lg flex flex-col md:flex-row justify-between items-center relative overflow-hidden"
@@ -96,7 +96,7 @@ export default function UserBanner() {
       </section>
 
       {/* Alerta destaque */}
-      <Alert className="bg-orange-50 text-orange-900 border-orange-200 mt-4">
+      <Alert className="bg-orange-50 text-orange-900 border-orange-200">
         <Trophy className="h-4 w-4 text-orange-600" />
         <AlertDescription>
           <div className="flex flex-wrap items-center gap-2">
@@ -118,6 +118,6 @@ export default function UserBanner() {
           </div>
         </AlertDescription>
       </Alert>
-    </>
+    </div>
   );
 }
