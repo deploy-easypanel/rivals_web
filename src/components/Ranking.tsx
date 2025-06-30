@@ -14,7 +14,7 @@ export default function Ranking() {
   const [teams, setTeams] = useState<Team[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('ranking');
+    const saved = localStorage.getItem('ducksgaming_ranking');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
