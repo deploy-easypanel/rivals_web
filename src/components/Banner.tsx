@@ -1,6 +1,8 @@
 'use client';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import type { BannerData } from '@/services/banner';
+import { mostrarBanner } from '@/services/banner';
 import { format, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { Gamepad2, Trophy } from 'lucide-react';
@@ -14,10 +16,12 @@ export default function UserBanner() {
   const [subtitle, setSubtitle] = useState(
     'Campeonato Amador de Counter-Strike'
   );
+  const [paragraph, setParagraph] = useState(
+    'Finais de semana épicos com os melhores times amadores'
+  );
   const [colorStart, setColorStart] = useState('#f97316');
   const [colorEnd, setColorEnd] = useState('#fbbf24');
 
-  // Carrega as configs do localStorage no mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem('ducksgaming_banner_config');
@@ -37,7 +41,27 @@ export default function UserBanner() {
     }
   }, []);
 
-  // Atualiza contagem regressiva
+  useEffect(() => {
+    async function fetchBanner() {
+      try {
+        const data: BannerData = await mostrarBanner();
+
+        if (data.data_torneio) setDataTorneio(new Date(data.data_torneio));
+        if (data.title) setTitle(data.title);
+        if (data.subtitle) setSubtitle(data.subtitle);
+        if (data.paragraph !== undefined && data.paragraph !== null) {
+          setParagraph(data.paragraph);
+        }
+        if (data.color_start) setColorStart(data.color_start);
+        if (data.color_end) setColorEnd(data.color_end);
+      } catch (err) {
+        console.error('Erro ao buscar banner:', err);
+        setDataTorneio(new Date(Date.now() + 24 * 60 * 60 * 1000)); // fallback para amanhã
+      }
+    }
+    fetchBanner();
+  }, []);
+
   useEffect(() => {
     if (!dataTorneio || !isValid(dataTorneio)) {
       setTimeLeft('');
@@ -80,9 +104,7 @@ export default function UserBanner() {
         <div>
           <h1 className="text-4xl font-bold mb-2">{title}</h1>
           <p className="text-xl mb-1">{subtitle}</p>
-          <p className="text-orange-100 mb-4">
-            Finais de semana épicos com os melhores times amadores
-          </p>
+          <p className="text-orange-100 mb-4">{paragraph}</p>
         </div>
 
         <div className="text-center mt-8 md:mt-0 animate-pulse">
