@@ -14,13 +14,11 @@ type Match = {
   status: 'ao vivo' | 'encerrada';
 };
 
-const LOCAL_STORAGE_KEY = 'ducksgaming_matches';
-
 export default function Partidas() {
   const [matches, setMatches] = useState<Match[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const stored = localStorage.getItem('ducksgaming_partidas');
     if (stored) {
       try {
         setMatches(JSON.parse(stored));
