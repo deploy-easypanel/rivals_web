@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { logout } from '@/services/logout';
 import {
   LogOut,
   PlusCircle,
@@ -38,8 +39,8 @@ export default function AdminHeader() {
             <Button
               variant="ghost"
               title="Sair"
+              onClick={logout}
               className="text-red-600 hover:text-red-800"
-              onClick={() => console.log('Logout')}
             >
               <LogOut className="w-5 h-5" />
             </Button>
