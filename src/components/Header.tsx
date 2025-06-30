@@ -11,11 +11,10 @@ export default function Header() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
