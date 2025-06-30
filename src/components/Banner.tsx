@@ -20,7 +20,7 @@ export default function UserBanner() {
   // Carrega as configs do localStorage no mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('bannerConfig');
+      const saved = localStorage.getItem('ducksgaming_banner_config');
       if (saved) {
         const config = JSON.parse(saved);
         if (config.dataTorneio) setDataTorneio(new Date(config.dataTorneio));
