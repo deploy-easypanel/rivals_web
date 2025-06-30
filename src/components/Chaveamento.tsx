@@ -62,7 +62,7 @@ export default function Chaveamento() {
   const [torneio, setTorneio] = useState<TorneioState>(defaultState);
 
   useEffect(() => {
-    const salvo = localStorage.getItem('torneio');
+    const salvo = localStorage.getItem('ducksgaming_chaveamento');
     if (salvo) {
       try {
         const parsed = JSON.parse(salvo);
