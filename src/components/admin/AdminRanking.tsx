@@ -39,7 +39,7 @@ export default function AdminRanking() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('ranking', JSON.stringify(teams));
+    localStorage.setItem('ducksgaming_ranking', JSON.stringify(teams));
   }, [teams]);
 
   const updateTeam = (index: number, field: keyof Team, value: string) => {
@@ -64,7 +64,7 @@ export default function AdminRanking() {
   const resetRanking = () => {
     if (confirm('Deseja realmente resetar o ranking?')) {
       setTeams([]);
-      localStorage.removeItem('ranking');
+      localStorage.removeItem('ducksgaming_ranking');
     }
   };
 
