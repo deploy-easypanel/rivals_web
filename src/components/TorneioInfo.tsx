@@ -21,7 +21,7 @@ export default function TorneioInfo() {
   });
 
   useEffect(() => {
-    const stored = localStorage.getItem('torneio_info');
+    const stored = localStorage.getItem('ducksgaming_torneio_info');
     if (stored) {
       try {
         setData(JSON.parse(stored));
