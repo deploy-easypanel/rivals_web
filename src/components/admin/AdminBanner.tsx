@@ -1,6 +1,7 @@
 'use client';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { atualizarBanner, mostrarBanner } from '@/services/banner';
 import { format, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { Gamepad2, Pencil, Save, Trophy } from 'lucide-react';
@@ -26,6 +27,7 @@ export default function AdminBanner() {
   const [colorStart, setColorStart] = useState('#f97316');
   const [colorEnd, setColorEnd] = useState('#fbbf24');
 
+  // Carrega do localStorage na inicialização
   useEffect(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -38,13 +40,32 @@ export default function AdminBanner() {
         if (config.colorStart) setColorStart(config.colorStart);
         if (config.colorEnd) setColorEnd(config.colorEnd);
       } else {
-        setDataTorneio(new Date(Date.now() + 24 * 60 * 60 * 1000));
+        setDataTorneio(new Date(Date.now() + 24 * 60 * 60 * 1000)); // 1 dia depois
       }
     } catch {
       setDataTorneio(new Date(Date.now() + 24 * 60 * 60 * 1000));
     }
   }, []);
 
+  // Carrega do backend
+  useEffect(() => {
+    async function loadBanner() {
+      try {
+        const data = await mostrarBanner();
+        setDataTorneio(new Date(data.data_torneio));
+        setTitle(data.title);
+        setSubtitle(data.subtitle);
+        setParagraph(data.paragraph || '');
+        setColorStart(data.color_start);
+        setColorEnd(data.color_end);
+      } catch {
+        alert('Erro ao carregar banner');
+      }
+    }
+    loadBanner();
+  }, []);
+
+  // Countdown para o torneio
   useEffect(() => {
     if (!dataTorneio || !isValid(dataTorneio)) {
       setTimeLeft('');
@@ -74,28 +95,10 @@ export default function AdminBanner() {
     return () => clearInterval(interval);
   }, [dataTorneio]);
 
-  const handleSave = () => {
-    if (!dataTorneio || !isValid(dataTorneio)) {
-      alert('Data do torneio inválida.');
-      return;
-    }
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY,
-      JSON.stringify({
-        dataTorneio: dataTorneio.toISOString(),
-        title,
-        subtitle,
-        paragraph,
-        colorStart,
-        colorEnd,
-      })
-    );
-    setIsEditing(false);
-  };
-
   const formatDateTimeLocal = (date: Date | null): string => {
     if (!date || !isValid(date)) return '';
     const pad = (n: number) => n.toString().padStart(2, '0');
+
     return (
       date.getFullYear() +
       '-' +
@@ -112,6 +115,27 @@ export default function AdminBanner() {
   const handleDateChange = (value: string) => {
     const newDate = new Date(value);
     if (isValid(newDate)) setDataTorneio(newDate);
+  };
+
+  const handleSave = async () => {
+    if (!dataTorneio || !isValid(dataTorneio)) {
+      alert('Data inválida');
+      return;
+    }
+
+    try {
+      await atualizarBanner({
+        dataTorneio: dataTorneio.toISOString(),
+        title,
+        subtitle,
+        paragraph,
+        colorStart,
+        colorEnd,
+      });
+      setIsEditing(false);
+    } catch {
+      alert('Erro ao salvar');
+    }
   };
 
   return (
