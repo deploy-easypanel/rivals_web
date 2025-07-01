@@ -9,12 +9,6 @@ import Ranking from '@/components/Ranking';
 import Stats from '@/components/Stats';
 import TorneioInfo from '@/components/TorneioInfo';
 
-const topTeams = [
-  { name: 'Ducks Squad', wins: 8, losses: 2, points: 24 },
-  { name: 'Fire Eagles', wins: 7, losses: 3, points: 21 },
-  { name: 'Storm Riders', wins: 6, losses: 4, points: 18 },
-];
-
 export default function PageDucksRivals() {
   return (
     <>
