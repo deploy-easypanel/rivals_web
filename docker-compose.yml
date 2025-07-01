@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: rivals_web
+    container_name: ducks_web
     ports:
       - '4140:4140'
     restart: unless-stopped
