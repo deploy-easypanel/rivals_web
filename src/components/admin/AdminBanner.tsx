@@ -124,12 +124,12 @@ export default function AdminBanner() {
 
     try {
       await atualizarBanner({
-        dataTorneio: dataTorneio.toISOString(),
+        data_torneio: dataTorneio,
         title,
         subtitle,
         paragraph,
-        colorStart,
-        colorEnd,
+        color_start: colorStart,
+        color_end: colorEnd,
       });
       setIsEditing(false);
     } catch {
