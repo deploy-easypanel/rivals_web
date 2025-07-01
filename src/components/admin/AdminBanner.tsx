@@ -47,7 +47,6 @@ export default function AdminBanner() {
     }
   }, []);
 
-  // Carrega do backend
   useEffect(() => {
     async function loadBanner() {
       try {
