@@ -4,7 +4,6 @@ const api = axios.create({
   baseURL: 'http://localhost:4141',
 });
 
-// Tipo do banner (exemplo, ajuste conforme seu backend)
 export interface BannerData {
   id?: number;
   title: string;
@@ -12,10 +11,9 @@ export interface BannerData {
   paragraph?: string;
   color_start: string;
   color_end: string;
-  data_torneio: Date; // ISO string
+  data_torneio: Date;
 }
 
-// Função para obter o banner
 export async function mostrarBanner(): Promise<BannerData> {
   try {
     const response = await api.get<BannerData>('/banner');
@@ -26,7 +24,6 @@ export async function mostrarBanner(): Promise<BannerData> {
   }
 }
 
-// Função para atualizar o banner
 export async function atualizarBanner(data: BannerData): Promise<BannerData> {
   try {
     const response = await api.put<BannerData>('/banner', data, {
