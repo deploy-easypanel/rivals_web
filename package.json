@@ -2,9 +2,6 @@
   "name": "rivals_web",
   "version": "0.1.0",
   "private": true,
-  "author": "Saulo Justiniano",
-  "license": "MIT",
-  "keywords": [],
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
