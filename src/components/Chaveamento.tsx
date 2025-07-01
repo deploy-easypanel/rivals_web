@@ -1,32 +1,9 @@
 'use client';
 
+import { getChaveamento } from '@/services/chaveamento';
+import { CorType, TorneioState } from '@/types';
 import { Crown, ShieldCheck, Swords, Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
-type CorType = 'green' | 'yellow' | 'gray';
-
-interface Time {
-  nome: string;
-  placar: number;
-  cor: CorType;
-}
-
-interface Jogo {
-  timeA: Time;
-  timeB: Time;
-}
-
-interface TimeSimples {
-  time: string;
-  placar: number;
-  cor: CorType;
-}
-
-interface TorneioState {
-  quartas: Jogo[];
-  semifinais: TimeSimples[];
-  final: TimeSimples;
-}
 
 const defaultState: TorneioState = {
   quartas: [
@@ -62,15 +39,13 @@ export default function Chaveamento() {
   const [torneio, setTorneio] = useState<TorneioState>(defaultState);
 
   useEffect(() => {
-    const salvo = localStorage.getItem('ducksgaming_chaveamento');
-    if (salvo) {
-      try {
-        const parsed = JSON.parse(salvo);
-        setTorneio(parsed);
-      } catch {
-        setTorneio(defaultState);
+    const carregar = async () => {
+      const dados = await getChaveamento();
+      if (dados) {
+        setTorneio(dados);
       }
-    }
+    };
+    carregar();
   }, []);
 
   return (
