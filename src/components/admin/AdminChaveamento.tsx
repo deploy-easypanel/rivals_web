@@ -1,4 +1,6 @@
 import { Input } from '@/components/ui/input';
+import { getChaveamento, saveChaveamento } from '@/services/chaveamento';
+import { CorType, Jogo, Time, TorneioState } from '@/types';
 import {
   Crown,
   Hash,
@@ -12,31 +14,6 @@ import {
 import { useEffect, useState } from 'react';
 
 const LOCAL_STORAGE_KEY = 'ducksgaming_chaveamento';
-
-type CorType = 'green' | 'yellow' | 'gray';
-
-interface Time {
-  nome: string;
-  placar: number;
-  cor: CorType;
-}
-
-interface Jogo {
-  timeA: Time;
-  timeB: Time;
-}
-
-interface TimeSimples {
-  time: string;
-  placar: number;
-  cor: CorType;
-}
-
-interface TorneioState {
-  quartas: Jogo[];
-  semifinais: TimeSimples[];
-  final: TimeSimples;
-}
 
 const defaultState: TorneioState = {
   quartas: [
@@ -87,7 +64,23 @@ export default function AdminChaveamento() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(torneio));
   }, [torneio]);
 
-  const resetarTorneio = () => {
+  useEffect(() => {
+    const carregar = async () => {
+      const dados = await getChaveamento();
+      if (dados) {
+        setTorneio(dados);
+      }
+    };
+    carregar();
+  }, []);
+
+  useEffect(() => {
+    saveChaveamento(torneio);
+  }, [torneio]);
+
+  const resetarTorneio = async () => {
+    setTorneio(defaultState);
+    await saveChaveamento(defaultState);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setTorneio(defaultState);
   };
