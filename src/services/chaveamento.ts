@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Configuração base
 const api = axios.create({
-  baseURL: 'http://192.168.1.10:4141',
+  baseURL: 'https://api.ducksgaming.site',
   headers: {
     'Content-Type': 'application/json',
   },
