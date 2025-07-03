@@ -18,9 +18,9 @@ export interface TimeSimples {
 }
 
 export interface TorneioState {
-  quartas: Jogo[]; // 4 jogos de quartas (idealmente)
-  semifinais: TimeSimples[]; // 2 semifinalistas
-  final: TimeSimples; // campeão
+  quartas: Jogo[];
+  semifinais: TimeSimples[];
+  final: TimeSimples;
 }
 export interface BannerData {
   id?: number;
@@ -29,5 +29,5 @@ export interface BannerData {
   paragraph?: string;
   color_start: string;
   color_end: string;
-  data_torneio: Date; // ISO string
+  data_torneio: Date;
 }
