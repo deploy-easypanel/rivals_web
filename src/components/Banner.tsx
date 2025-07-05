@@ -1,8 +1,8 @@
 'use client';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import type { BannerData } from '@/services/banner';
 import { mostrarBanner } from '@/services/banner';
+import { BannerData } from '@/types';
 import { format, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { Gamepad2, Trophy } from 'lucide-react';

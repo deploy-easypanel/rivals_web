@@ -15,7 +15,7 @@ import {
   getMatches,
   updateMatch,
 } from '@/services/partidas';
-import { Match } from '@/types';
+import { PartidaData } from '@/types';
 import {
   Activity,
   Calendar,
@@ -31,7 +31,7 @@ import {
 import { useEffect, useState } from 'react';
 
 export default function AdminPartidas() {
-  const [matches, setMatches] = useState<Match[]>([]);
+  const [matches, setMatches] = useState<PartidaData[]>([]);
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
 
   const selectedMatch = matches.find((m) => m.id === selectedMatchId);
@@ -49,7 +49,7 @@ export default function AdminPartidas() {
   }, []);
 
   const handleAddMatch = async () => {
-    const newMatch: Omit<Match, 'id'> = {
+    const newMatch: Omit<PartidaData, 'id'> = {
       team1: 'Novo Time 1',
       team2: 'Novo Time 2',
       time: '00:00',
@@ -69,7 +69,7 @@ export default function AdminPartidas() {
     }
   };
 
-  const handleUpdate = async (field: keyof Match, value: string) => {
+  const handleUpdate = async (field: keyof PartidaData, value: string) => {
     if (!selectedMatch) return;
 
     const updatedMatch = { ...selectedMatch, [field]: value };

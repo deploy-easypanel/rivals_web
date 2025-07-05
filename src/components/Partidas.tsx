@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { getMatches } from '@/services/partidas';
-import { Match } from '@/types';
+import { PartidaData } from '@/types';
 import { Activity, Calendar, CheckCircle, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function Partidas() {
-  const [matches, setMatches] = useState<Match[]>([]);
+  const [matches, setMatches] = useState<PartidaData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
