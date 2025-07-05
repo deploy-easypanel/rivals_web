@@ -1,4 +1,5 @@
 export type CorType = 'green' | 'yellow' | 'gray';
+export type MatchStatus = 'ao vivo' | 'encerrada';
 
 export interface Time {
   nome: string;
@@ -31,3 +32,13 @@ export interface BannerData {
   color_end: string;
   data_torneio: Date;
 }
+
+export type Match = {
+  id?: number;
+  team1: string;
+  team2: string;
+  date: string;
+  time: string;
+  link: string;
+  status: MatchStatus;
+};

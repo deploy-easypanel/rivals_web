@@ -1,18 +1,9 @@
+import { BannerData } from '@/types';
 import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'https://api.ducksgaming.site',
 });
-
-export interface BannerData {
-  id?: number;
-  title: string;
-  subtitle: string;
-  paragraph?: string;
-  color_start: string;
-  color_end: string;
-  data_torneio: Date;
-}
 
 export async function mostrarBanner(): Promise<BannerData> {
   try {

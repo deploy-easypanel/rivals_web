@@ -1,31 +1,29 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { getMatches } from '@/services/partidas';
+import { Match } from '@/types';
 import { Activity, Calendar, CheckCircle, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-type Match = {
-  id: number;
-  team1: string;
-  team2: string;
-  time: string;
-  date: string;
-  link: string;
-  status: 'ao vivo' | 'encerrada';
-};
-
 export default function Partidas() {
   const [matches, setMatches] = useState<Match[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('ducksgaming_partidas');
-    if (stored) {
+    async function fetchMatches() {
       try {
-        setMatches(JSON.parse(stored));
-      } catch {
+        const data = await getMatches();
+        setMatches(data);
+      } catch (error) {
+        console.error('Erro ao buscar partidas:', error);
         setMatches([]);
+      } finally {
+        setLoading(false);
       }
     }
+
+    fetchMatches();
   }, []);
 
   return (
@@ -35,7 +33,9 @@ export default function Partidas() {
         Partidas do Torneio
       </h2>
 
-      {matches.length === 0 ? (
+      {loading ? (
+        <p className="text-gray-500 text-center">Carregando partidas...</p>
+      ) : matches.length === 0 ? (
         <p className="text-gray-500 text-center">Nenhuma partida disponível.</p>
       ) : (
         <div className="space-y-4">

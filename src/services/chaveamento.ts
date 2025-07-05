@@ -1,4 +1,4 @@
-import { TorneioState } from '@/types'; // ajuste o path conforme seu projeto
+import { TorneioState } from '@/types';
 import axios from 'axios';
 
 // Configuração base

@@ -10,6 +10,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
+  createMatch,
+  deleteMatch,
+  getMatches,
+  updateMatch,
+} from '@/services/partidas';
+import { Match } from '@/types';
+import {
   Activity,
   Calendar,
   CheckCircle,
@@ -23,46 +30,26 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-type Match = {
-  id: number;
-  team1: string;
-  team2: string;
-  time: string;
-  date: string;
-  link: string;
-  status: 'ao vivo' | 'encerrada';
-};
-
-const LOCAL_STORAGE_KEY = 'ducksgaming_partidas';
-
 export default function AdminPartidas() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (stored) {
-      setMatches(JSON.parse(stored));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(matches));
-  }, [matches]);
-
   const selectedMatch = matches.find((m) => m.id === selectedMatchId);
 
-  const handleUpdate = (field: keyof Match, value: string) => {
-    if (!selectedMatch) return;
-    const updated = matches.map((m) =>
-      m.id === selectedMatch.id ? { ...m, [field]: value } : m
-    );
-    setMatches(updated);
-  };
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getMatches();
+        setMatches(data);
+      } catch (err) {
+        console.error('Erro ao buscar partidas:', err);
+      }
+    }
+    fetchData();
+  }, []);
 
-  const handleAddMatch = () => {
-    const newMatch: Match = {
-      id: Date.now(),
+  const handleAddMatch = async () => {
+    const newMatch: Omit<Match, 'id'> = {
       team1: 'Novo Time 1',
       team2: 'Novo Time 2',
       time: '00:00',
@@ -70,13 +57,44 @@ export default function AdminPartidas() {
       link: 'https://twitch.tv/',
       status: 'ao vivo',
     };
-    setMatches([...matches, newMatch]);
-    setSelectedMatchId(newMatch.id);
+
+    try {
+      const created = await createMatch(newMatch);
+      setMatches([...matches, created]);
+      if (typeof created.id === 'number') {
+        setSelectedMatchId(created.id);
+      }
+    } catch (err) {
+      console.error('Erro ao criar partida:', err);
+    }
   };
 
-  const handleDeleteMatch = (id: number) => {
-    setMatches(matches.filter((m) => m.id !== id));
-    if (selectedMatchId === id) setSelectedMatchId(null);
+  const handleUpdate = async (field: keyof Match, value: string) => {
+    if (!selectedMatch) return;
+
+    const updatedMatch = { ...selectedMatch, [field]: value };
+    if (typeof updatedMatch.id !== 'number') {
+      console.error('ID da partida é inválido:', updatedMatch.id);
+      return;
+    }
+    try {
+      await updateMatch(updatedMatch.id, updatedMatch);
+      setMatches((prev) =>
+        prev.map((m) => (m.id === updatedMatch.id ? updatedMatch : m))
+      );
+    } catch (err) {
+      console.error('Erro ao atualizar partida:', err);
+    }
+  };
+
+  const handleDeleteMatch = async (id: number) => {
+    try {
+      await deleteMatch(id);
+      setMatches(matches.filter((m) => m.id !== id));
+      if (selectedMatchId === id) setSelectedMatchId(null);
+    } catch (err) {
+      console.error('Erro ao deletar partida:', err);
+    }
   };
 
   return (
@@ -141,11 +159,8 @@ export default function AdminPartidas() {
                 />
               </div>
 
-              {/* Novo campo status */}
               <div className="flex items-center gap-2">
-                <span className="text-gray-700 font-medium">
-                  <CheckCircle className="w-4 h-4 text-gray-600" />
-                </span>
+                <CheckCircle className="w-4 h-4 text-gray-600" />
                 <Select
                   value={selectedMatch.status}
                   onValueChange={(value) =>
@@ -166,7 +181,7 @@ export default function AdminPartidas() {
         )}
       </section>
 
-      {/* PARTIDAS */}
+      {/* LISTA DE PARTIDAS */}
       <section className="w-full bg-white rounded-xl shadow-md p-6 overflow-x-auto">
         <h2 className="text-2xl font-bold flex items-center text-orange-600 mb-4">
           <Calendar className="w-6 h-6 mr-2" />
@@ -183,7 +198,9 @@ export default function AdminPartidas() {
             ? 'bg-green-100 hover:ring-green-400'
             : 'bg-gray-100 hover:ring-gray-400'
         }`}
-              onClick={() => setSelectedMatchId(match.id)}
+              onClick={() =>
+                match.id !== undefined && setSelectedMatchId(match.id)
+              }
             >
               <div className="mb-2 md:mb-0">
                 <p className="text-sm text-gray-500">
@@ -201,9 +218,9 @@ export default function AdminPartidas() {
                   }`}
                 >
                   {match.status === 'ao vivo' ? (
-                    <Activity className="w-5 h-5 text-green-600" />
+                    <Activity className="w-5 h-5" />
                   ) : (
-                    <CheckCircle className="w-5 h-5 text-gray-600" />
+                    <CheckCircle className="w-5 h-5" />
                   )}
                   {match.status === 'ao vivo' ? 'AO VIVO' : 'Encerrada'}
                 </p>
@@ -222,13 +239,15 @@ export default function AdminPartidas() {
                       : 'Assistir transmissão'
                   }
                 >
-                  <Play className="w-4 h-4 text-white" />
+                  <Play className="w-4 h-4" />
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDeleteMatch(match.id);
+                    if (typeof match.id === 'number') {
+                      handleDeleteMatch(match.id);
+                    }
                   }}
                   className="text-red-500 hover:text-red-700"
                 >
