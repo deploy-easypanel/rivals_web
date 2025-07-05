@@ -23,7 +23,7 @@ export interface TorneioState {
   semifinais: TimeSimples[];
   final: TimeSimples;
 }
-export interface BannerData {
+export type BannerData = {
   id?: number;
   title: string;
   subtitle: string;
@@ -31,7 +31,7 @@ export interface BannerData {
   color_start: string;
   color_end: string;
   data_torneio: Date;
-}
+};
 
 export type Match = {
   id?: number;
