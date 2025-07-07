@@ -33,9 +33,37 @@ import { useEffect, useState } from 'react';
 export default function AdminPartidas() {
   const [matches, setMatches] = useState<PartidaData[]>([]);
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
+  const [formState, setFormState] = useState<Omit<PartidaData, 'id'>>({
+    team1: '',
+    team2: '',
+    date: '',
+    time: '',
+    link: '',
+    status: 'ao vivo',
+  });
 
   const selectedMatch = matches.find((m) => m.id === selectedMatchId);
 
+  // Sincroniza formState quando a seleção muda
+  useEffect(() => {
+    if (selectedMatch) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...rest } = selectedMatch;
+      setFormState(rest);
+    } else {
+      // Se desmarcar seleção, limpa formulário
+      setFormState({
+        team1: '',
+        team2: '',
+        date: '',
+        time: '',
+        link: '',
+        status: 'ao vivo',
+      });
+    }
+  }, [selectedMatch]);
+
+  // Busca as partidas na inicialização
   useEffect(() => {
     async function fetchData() {
       try {
@@ -48,6 +76,7 @@ export default function AdminPartidas() {
     fetchData();
   }, []);
 
+  // Cria nova partida
   const handleAddMatch = async () => {
     const newMatch: Omit<PartidaData, 'id'> = {
       team1: 'Novo Time 1',
@@ -69,24 +98,33 @@ export default function AdminPartidas() {
     }
   };
 
-  const handleUpdate = async (field: keyof PartidaData, value: string) => {
-    if (!selectedMatch) return;
+  // Atualiza formState local ao editar inputs
+  const handleFormChange = (field: keyof typeof formState, value: string) => {
+    setFormState((prev) => ({ ...prev, [field]: value }));
+  };
 
-    const updatedMatch = { ...selectedMatch, [field]: value };
-    if (typeof updatedMatch.id !== 'number') {
-      console.error('ID da partida é inválido:', updatedMatch.id);
-      return;
-    }
+  // Atualiza partida no backend e no estado global
+  const handleUpdate = async () => {
+    if (!selectedMatch || typeof selectedMatch.id !== 'number') return;
+
     try {
-      await updateMatch(updatedMatch.id, updatedMatch);
+      await updateMatch(selectedMatch.id, {
+        id: selectedMatch.id,
+        ...formState,
+      });
       setMatches((prev) =>
-        prev.map((m) => (m.id === updatedMatch.id ? updatedMatch : m))
+        prev.map((m) =>
+          m.id === selectedMatch.id ? { id: selectedMatch.id, ...formState } : m
+        )
       );
+      alert('Partida atualizada com sucesso!');
     } catch (err) {
       console.error('Erro ao atualizar partida:', err);
+      alert('Erro ao atualizar partida.');
     }
   };
 
+  // Deleta partida
   const handleDeleteMatch = async (id: number) => {
     try {
       await deleteMatch(id);
@@ -94,6 +132,7 @@ export default function AdminPartidas() {
       if (selectedMatchId === id) setSelectedMatchId(null);
     } catch (err) {
       console.error('Erro ao deletar partida:', err);
+      alert('Erro ao deletar partida.');
     }
   };
 
@@ -125,14 +164,13 @@ export default function AdminPartidas() {
               <div className="flex flex-col sm:flex-row gap-2 items-center">
                 <Clock className="w-8 h-8 text-gray-500" />
                 <Input
-                  type="text"
-                  value={selectedMatch.date}
-                  onChange={(e) => handleUpdate('date', e.target.value)}
-                  placeholder="Data"
+                  value={formState.date}
+                  onChange={(e) => handleFormChange('date', e.target.value)}
+                  placeholder="Dia"
                 />
                 <Input
-                  value={selectedMatch.time}
-                  onChange={(e) => handleUpdate('time', e.target.value)}
+                  value={formState.time}
+                  onChange={(e) => handleFormChange('time', e.target.value)}
                   placeholder="Hora"
                 />
               </div>
@@ -140,13 +178,13 @@ export default function AdminPartidas() {
               <div className="flex sm:flex-row items-center gap-2">
                 <Users2 className="w-8 h-8 text-gray-500" />
                 <Input
-                  value={selectedMatch.team1}
-                  onChange={(e) => handleUpdate('team1', e.target.value)}
+                  value={formState.team1}
+                  onChange={(e) => handleFormChange('team1', e.target.value)}
                   placeholder="Time 1"
                 />
                 <Input
-                  value={selectedMatch.team2}
-                  onChange={(e) => handleUpdate('team2', e.target.value)}
+                  value={formState.team2}
+                  onChange={(e) => handleFormChange('team2', e.target.value)}
                   placeholder="Time 2"
                 />
               </div>
@@ -154,8 +192,8 @@ export default function AdminPartidas() {
               <div className="flex items-center gap-2">
                 <Link2 className="w-4 h-4 text-gray-500" />
                 <Input
-                  value={selectedMatch.link}
-                  onChange={(e) => handleUpdate('link', e.target.value)}
+                  value={formState.link}
+                  onChange={(e) => handleFormChange('link', e.target.value)}
                   placeholder="Link da Transmissão"
                 />
               </div>
@@ -163,9 +201,9 @@ export default function AdminPartidas() {
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-gray-600" />
                 <Select
-                  value={selectedMatch.status}
+                  value={formState.status}
                   onValueChange={(value) =>
-                    handleUpdate('status', value as 'ao vivo' | 'encerrada')
+                    handleFormChange('status', value as 'ao vivo' | 'encerrada')
                   }
                 >
                   <SelectTrigger className="w-full">
@@ -177,6 +215,13 @@ export default function AdminPartidas() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <Button
+                onClick={handleUpdate}
+                className="w-full bg-orange-600 text-white hover:bg-orange-700"
+              >
+                Salvar Alterações
+              </Button>
             </div>
           </div>
         )}
@@ -194,11 +239,11 @@ export default function AdminPartidas() {
             <div
               key={match.id}
               className={`flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-xl hover:ring-2 transition-all group cursor-pointer shadow-sm
-        ${
-          match.status === 'ao vivo'
-            ? 'bg-green-100 hover:ring-green-400'
-            : 'bg-gray-100 hover:ring-gray-400'
-        }`}
+                ${
+                  match.status === 'ao vivo'
+                    ? 'bg-green-100 hover:ring-green-400'
+                    : 'bg-gray-100 hover:ring-gray-400'
+                }`}
               onClick={() =>
                 match.id !== undefined && setSelectedMatchId(match.id)
               }
