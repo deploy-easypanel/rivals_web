@@ -125,6 +125,7 @@ export default function AdminPartidas() {
               <div className="flex flex-col sm:flex-row gap-2 items-center">
                 <Clock className="w-8 h-8 text-gray-500" />
                 <Input
+                  type="text"
                   value={selectedMatch.date}
                   onChange={(e) => handleUpdate('date', e.target.value)}
                   placeholder="Data"
