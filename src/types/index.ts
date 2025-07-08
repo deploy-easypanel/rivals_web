@@ -42,3 +42,12 @@ export type PartidaData = {
   link: string;
   status: PartidaStatus;
 };
+
+export type TorneioInfoData = {
+  local: string;
+  horario: string;
+  formato: string;
+  data: string;
+  equipes: string;
+  regulamento: string;
+};

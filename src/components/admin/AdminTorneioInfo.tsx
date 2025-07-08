@@ -2,6 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { getTorneioInfo, saveTorneioInfo } from '@/services/torneio_info';
+import { TorneioInfoData } from '@/types';
 import {
   Clock,
   FileText,
@@ -13,45 +15,51 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const LOCAL_STORAGE_KEY = 'ducksgaming_torneio_info';
-
-interface TorneioData {
-  local: string;
-  horario: string;
-  formato: string;
-  data: string;
-  equipes: string;
-  regulamento: string;
-}
-
 export default function AdminTorneioInfo() {
   const [editMode, setEditMode] = useState(false);
-  const [data, setData] = useState<TorneioData>({
-    local: 'Transmissão via Twitch',
-    horario: '14:00 - 20:00',
-    formato: 'Eliminação Simples',
-    data: '2025-07-15',
-    equipes: '4 equipes',
-    regulamento: 'https://ducksgaming.com/regulamento',
+  const [data, setData] = useState<TorneioInfoData>({
+    local: '',
+    horario: '',
+    formato: '',
+    data: '',
+    equipes: '',
+    regulamento: '',
   });
+  const [loading, setLoading] = useState(true);
 
-  // Carregar do localStorage
+  // Buscar dados da API na montagem do componente
   useEffect(() => {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (stored) {
+    async function fetchData() {
+      setLoading(true);
       try {
-        const parsed = JSON.parse(stored);
-        setData((d) => ({ ...d, ...parsed }));
-      } catch {
-        // inválido
+        const torneio = await getTorneioInfo();
+        if (torneio) {
+          setData(torneio);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar informações do torneio:', error);
+      } finally {
+        setLoading(false);
       }
     }
+    fetchData();
   }, []);
 
-  const handleSave = () => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-    setEditMode(false);
+  const handleSave = async () => {
+    try {
+      const success = await saveTorneioInfo(data);
+      if (!success) throw new Error('Falha ao salvar informações');
+      setEditMode(false);
+      alert('Informações salvas com sucesso!');
+    } catch (error) {
+      console.error(error);
+      alert('Erro ao salvar informações do torneio.');
+    }
   };
+
+  if (loading) {
+    return <p>Carregando informações do torneio...</p>;
+  }
 
   return (
     <div className="flex flex-col md:flex-row gap-6">
@@ -90,11 +98,11 @@ export default function AdminTorneioInfo() {
               <label className="text-sm text-gray-600 mb-1">{label}</label>
               <Input
                 disabled={!editMode}
-                value={data[key as keyof TorneioData]}
+                value={data[key as keyof TorneioInfoData]}
                 onChange={(e) =>
                   setData((d) => ({
                     ...d,
-                    [key as keyof TorneioData]: e.target.value,
+                    [key as keyof TorneioInfoData]: e.target.value,
                   }))
                 }
               />
